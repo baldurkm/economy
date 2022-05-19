@@ -111,7 +111,7 @@ def main():
             total_value_inventory = 0
             for x in inventory:
                 print(x, ', valued $', inventory[x])
-                total_value_inventory = total_value_inventory + inventory[x]
+                total_value_inventory = total_value_inventory + float(inventory[x])
             print('Total value of inventory: ', total_value_inventory)
 
 

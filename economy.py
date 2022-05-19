@@ -18,9 +18,17 @@ def start():
 def fluctuate_currency(money):
     random.seed()
     rand = random.random()
-    multiplier = (rand*0.05) + 0.99
+    multiplier = (rand*0.05) + 0.975
     money = money * multiplier
     return money
+
+#Function for fluctuation of item values
+def fluctuate_value(value):
+    random.seed()
+    rand = random.random()
+    multiplier = (rand*0.15) + 0.90
+    value = value * multiplier
+    return value
 
 #Main function
 def main():
@@ -31,7 +39,7 @@ def main():
     today = datetime.today()
 
     while not (command == 'q'):
-        print('Enter command. q=quit, w=wait, , f=finances, i=inventory, m=market, b=buy item')
+        print('\nEnter command. q=quit, w=wait, f=finances, i=inventory, m=market, b=buy, s=sell')
         command = input('>')
 
         # Exit
@@ -49,7 +57,7 @@ def main():
             #Fluctuate item value
             if inventory != {}:
                 for x in inventory:
-                    inventory[x] = fluctuate_currency(float(inventory[x]))
+                    inventory[x] = fluctuate_value(float(inventory[x]))
                 
             
 
@@ -59,7 +67,7 @@ def main():
 
         #Buy item
         if command == 'b':
-            print('Please type the name of the item you would like to purchase.')
+            print('Type the name of the item you would like to purchase.')
             purchase = input('>')
             if purchase in market:
                 print('Ordered ', purchase)
@@ -72,6 +80,17 @@ def main():
             else:
                 print('No such item.')
 
+        #Sell item
+        if command == 's':
+            print('Type the name of the item you would like to sell.')
+            sell = input('>')
+            if sell in inventory:
+                print('Sell order for ', sell, ', at $', inventory[sell])
+                money = money + float(inventory[sell])
+                inventory.pop(sell)
+            else:
+                print('You do not have ', sell)
+
         #List market items
         if command == 'm':
             print('Market items: ')
@@ -81,8 +100,11 @@ def main():
         #List inventory        
         if command == 'i':
             print('Current inventory: ')
+            total_value_inventory = 0
             for x in inventory:
                 print(x, ', valued $', inventory[x])
+                total_value_inventory = total_value_inventory + inventory[x]
+            print('Total value of inventory: ', total_value_inventory)
 
 
             

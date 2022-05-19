@@ -26,7 +26,7 @@ def fluctuate_currency(money):
 def fluctuate_value(value):
     random.seed()
     rand = random.random()
-    multiplier = (rand*0.15) + 0.90
+    multiplier = (rand*0.15) + 0.925
     value = value * multiplier
     return value
 
@@ -35,11 +35,13 @@ def main():
     command = ''
     inventory = {}
     money = 100
+    inflation_measure = 100
     start()
     today = datetime.today()
-
+    print('You have $', money)
+    
     while not (command == 'q'):
-        print('\nEnter command. q=quit, w=wait, f=finances, i=inventory, m=market, b=buy, s=sell')
+        print('\nEnter command. q=quit, w=wait, f=finances, i=inventory, m=market, b=buy, s=sell, e=economy')
         command = input('>')
 
         # Exit
@@ -52,18 +54,23 @@ def main():
             print('Waiting 1 day.')
             today = today + timedelta(days=1)
             #Fluctuate money
+            oldmoney = money #for inflation measurement
             money = fluctuate_currency(money)
             print('It is now '+str(today.strftime("%d/%m/%Y")))
             #Fluctuate item value
             if inventory != {}:
                 for x in inventory:
                     inventory[x] = fluctuate_value(float(inventory[x]))
-                
-            
+            #Fluctuate inflation rate for measurement
+            inflation_measure = inflation_measure+money-oldmoney
 
         #List finances
         if command == 'f':
             print('You have $'+str(money))
+
+        #Economy information
+        if command == 'e':
+            print('The inflation rate thus far is ', str(inflation_measure-100), '%')
 
         #Buy item
         if command == 'b':
@@ -91,7 +98,8 @@ def main():
             else:
                 print('You do not have ', sell)
 
-        #List market items
+        #List market items.
+        #Todo: randomize availability of market items.
         if command == 'm':
             print('Market items: ')
             for x in market:

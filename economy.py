@@ -38,10 +38,12 @@ def main():
     inflation_measure = 100
     start()
     today = datetime.today()
+    interest = 1.5
+    loan = 0
     print('You have $', money)
     
     while not (command == 'q'):
-        print('\nEnter command. q=quit, w=wait, f=finances, i=inventory, m=market, b=buy, s=sell, e=economy')
+        print('\nEnter command. q=quit, w=wait, f=finances, i=inventory, m=market, b=buy, s=sell, e=economy, l=loans')
         command = input('>')
 
         # Exit
@@ -63,6 +65,8 @@ def main():
                     inventory[x] = fluctuate_value(float(inventory[x]))
             #Fluctuate inflation rate for measurement
             inflation_measure = inflation_measure+money-oldmoney
+            #Interest on loans
+            loan = loan * (100+interest) / 100
 
         #List finances
         if command == 'f':
@@ -86,6 +90,13 @@ def main():
                     print('Insufficient funds.')
             else:
                 print('No such item.')
+
+        #Loan
+        if command == 'l':
+            print('You currently owe $' + str(loan) + '. The interest rate is ' + str(interest) + '% How much would you like to loan? (enter negative to repay)')
+            takeloan = input('>')
+            money = money + int(takeloan)
+            loan = loan + int(takeloan)     
 
         #Sell item
         if command == 's':
